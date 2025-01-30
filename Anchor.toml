@@ -1,0 +1,14 @@
+anchor_version = "0.29"
+
+[features]
+seeds = false
+
+[programs.localnet]
+umbra_clmm = "CLMMjQ8usCDmeP2hZFc6Mhih7JFbjg6mHeRxeEtTWHNf"
+
+[registry]
+url = "https://github.com/UmbraDEX/umbra-clmm"
+
+[provider]
+cluster = "https://staging-rpc.dev2.eclipsenetwork.xyz"
+wallet = "~/.config/solana/id.json"
