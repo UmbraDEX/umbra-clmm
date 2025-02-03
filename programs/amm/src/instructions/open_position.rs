@@ -165,6 +165,21 @@ pub struct OpenPosition<'info> {
     // pub tick_array_bitmap: AccountLoader<'info, TickArrayBitmapExtension>,
 }
 
+#[event]
+pub struct CreatePersonalPositionEvent {
+    pub pool_state: Pubkey,
+    pub minter: Pubkey,
+    pub nft_owner: Pubkey,
+    pub tick_lower_index: i32,
+    pub tick_upper_index: i32,
+    pub liquidity: u128,
+    pub deposit_amount_0: u64,
+    pub deposit_amount_1: u64,
+    pub deposit_amount_0_transfer_fee: u64,
+    pub deposit_amount_1_transfer_fee: u64,
+    pub position_nft_mint: Pubkey,
+}
+
 pub fn open_position_v1<'a, 'b, 'c: 'info, 'info>(
     ctx: Context<'a, 'b, 'c, 'info, OpenPosition<'info>>,
     liquidity: u128,
@@ -377,7 +392,8 @@ pub fn open_position<'a, 'b, 'c: 'info, 'info>(
             deposit_amount_0: amount_0,
             deposit_amount_1: amount_1,
             deposit_amount_0_transfer_fee: amount_0_transfer_fee,
-            deposit_amount_1_transfer_fee: amount_1_transfer_fee
+            deposit_amount_1_transfer_fee: amount_1_transfer_fee,
+            position_nft_mint: position_nft_mint.key(),
         });
     }
 

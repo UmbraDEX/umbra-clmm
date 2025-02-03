@@ -41,7 +41,7 @@ pub struct ClosePosition<'info> {
     pub system_program: Program<'info, System>,
 
     /// Token/Token2022 program to close token/mint account
-    pub token_program: Interface<'info, TokenInterface>,
+    pub token_program: Interface<'info, TokenInterface>
 }
 
 pub fn close_position<'a, 'b, 'c, 'info>(
@@ -70,6 +70,16 @@ pub fn close_position<'a, 'b, 'c, 'info>(
             return err!(ErrorCode::ClosePositionErr);
         }
     }
+
+    emit!(ClosePersonalPositionEvent {
+        pool_state: ctx.accounts.personal_position.pool_id,
+        closer: ctx.accounts.nft_owner.key(),
+        nft_owner: ctx.accounts.nft_owner.key(),
+        tick_lower_index: ctx.accounts.personal_position.tick_lower_index,
+        tick_upper_index: ctx.accounts.personal_position.tick_upper_index,
+        liquidity: ctx.accounts.personal_position.liquidity,
+        position_nft_mint: ctx.accounts.position_nft_mint.key(),
+    });
 
     let token_program = ctx.accounts.token_program.to_account_info();
     let position_nft_mint = ctx.accounts.position_nft_mint.to_account_info();
