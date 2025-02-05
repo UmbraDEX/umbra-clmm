@@ -1,9 +1,8 @@
-
 .anchor
 .DS_Store
 target
 KeyPairs
-*.json
+id.json
 client/target
 **/*.rs.bk
 node_modules
