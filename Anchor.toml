@@ -4,11 +4,11 @@ anchor_version = "0.29"
 seeds = false
 
 [programs.localnet]
-amm_v3 = "CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK"
+umbra_clmm = "CLMMjQ8usCDmeP2hZFc6Mhih7JFbjg6mHeRxeEtTWHNf"
 
 [registry]
-url = "https://github.com/raydium-io/raydium-amm-v3"
+url = "https://github.com/UmbraDEX/umbra-clmm"
 
 [provider]
-cluster = "localnet"
+cluster = "https://staging-rpc.dev2.eclipsenetwork.xyz"
 wallet = "~/.config/solana/id.json"

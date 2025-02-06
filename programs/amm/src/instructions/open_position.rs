@@ -377,7 +377,8 @@ pub fn open_position<'a, 'b, 'c: 'info, 'info>(
             deposit_amount_0: amount_0,
             deposit_amount_1: amount_1,
             deposit_amount_0_transfer_fee: amount_0_transfer_fee,
-            deposit_amount_1_transfer_fee: amount_1_transfer_fee
+            deposit_amount_1_transfer_fee: amount_1_transfer_fee,
+            position_nft_mint: position_nft_mint.key(),
         });
     }
 

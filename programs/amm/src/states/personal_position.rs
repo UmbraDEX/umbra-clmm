@@ -142,6 +142,38 @@ pub struct CreatePersonalPositionEvent {
 
     /// The token transfer fee for deposit_amount_1
     pub deposit_amount_1_transfer_fee: u64,
+
+    /// The mint address of the position NFT
+    pub position_nft_mint: Pubkey,
+}
+
+/// Emitted when close a position
+#[event]
+#[cfg_attr(feature = "client", derive(Debug))]
+pub struct ClosePersonalPositionEvent {
+    /// The pool for which liquidity was added
+    #[index]
+    pub pool_state: Pubkey,
+
+    /// The address that close the position
+    pub closer: Pubkey,
+
+    /// The owner of the position and recipient of any minted liquidity
+    pub nft_owner: Pubkey,
+
+    /// The lower tick of the position
+    #[index]
+    pub tick_lower_index: i32,
+
+    /// The upper tick of the position
+    #[index]
+    pub tick_upper_index: i32,
+
+    /// The amount of liquidity minted to the position range
+    pub liquidity: u128,
+
+    /// The mint address of the position NFT
+    pub position_nft_mint: Pubkey,
 }
 
 /// Emitted when liquidity is increased.

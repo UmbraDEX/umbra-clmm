@@ -1,13 +1,13 @@
 [package]
-name = "raydium-amm-v3"
+name = "umbra-clmm"
 version = "0.1.0"
-description = "Anchor client and source for Raydium concentrated liquidity AMM"
+description = "Anchor client and source for Umbra concentrated liquidity market maker"
 edition = "2021"
-keywords = ["solana", "anchor", "raydium"]
+keywords = ["solana", "anchor", "umbra"]
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "raydium_amm_v3"
+name = "umbra_clmm"
 doctest = false
 
 [features]
