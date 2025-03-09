@@ -2,6 +2,7 @@ use crate::error::ErrorCode;
 use crate::states::*;
 use crate::swap_v2::{exact_internal_v2, SwapSingleV2};
 use anchor_lang::prelude::*;
+use anchor_lang::Discriminator;
 use anchor_spl::{
     token::Token,
     token_interface::{Mint, Token2022, TokenAccount},
@@ -77,7 +78,16 @@ pub fn swap_router_base_in<'a, 'b, 'c: 'info, 'info>(
         }
 
         // solana_program::log::sol_log_compute_units();
-        accounts = remaining_accounts.as_slice();
+
+        // Split remaining accounts at the next AMM config
+        let (next_swap_accounts, remaining_swap_accounts) = if !accounts.is_empty() {
+            accounts.split_at(accounts.iter().position(|account| {
+                account.data_len() >= 8 && account.data.borrow()[..8] == AmmConfig::discriminator()
+            }).unwrap_or(accounts.len()))
+        } else {
+            (accounts, &[][..])
+        };
+        accounts = remaining_swap_accounts;
         amount_in_internal = exact_internal_v2(
             &mut SwapSingleV2 {
                 payer: ctx.accounts.payer.clone(),
@@ -94,7 +104,7 @@ pub fn swap_router_base_in<'a, 'b, 'c: 'info, 'info>(
                 token_program_2022: ctx.accounts.token_program_2022.clone(),
                 memo_program: ctx.accounts.memo_program.clone(),
             },
-            accounts,
+            next_swap_accounts,
             amount_in_internal,
             0,
             true,
