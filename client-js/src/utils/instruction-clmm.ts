@@ -93,7 +93,7 @@ export async function updateCLMMAmmConfig(
   connection: Connection,
   owner: Signer,
   config_index: number,
-  updateConfig: { key: string; value: number }[]
+  updateConfig: { key: string; value: number | PublicKey }[]
 ) {
   const [address, _] = await getAmmConfigAddress(
     config_index,
@@ -109,12 +109,20 @@ export async function updateCLMMAmmConfig(
         new_fund_owner: 4,
       }[key];
 
+      console.log("update config address", param, value);
+
+      const remainingAccounts =
+        value instanceof PublicKey
+          ? [{ pubkey: value, isSigner: false, isWritable: false }]
+          : [];
+
       const ix = await program.methods
-        .updateAmmConfig(param!, value)
+        .updateAmmConfig(param!, typeof value === "number" ? value : 0)
         .accounts({
           owner: owner.publicKey,
           ammConfig: address,
         })
+        .remainingAccounts(remainingAccounts)
         .instruction();
       return ix;
     })
@@ -239,6 +247,102 @@ export async function updatePoolStatusCLMM(
 
   const tx = await sendTransaction(connection, [ix], [owner], confirmOptions);
 
+  return tx;
+}
+
+export async function swapCLMM(
+  program: Program<AmmV3>,
+  connection: Connection,
+  owner: Signer,
+  amountIn: BN,
+  amountOutMinimum: BN,
+  poolAddress: PublicKey,
+  token0: PublicKey,
+  token1: PublicKey
+) {
+  const inputTokenAccount = getAssociatedTokenAddressSync(
+    token0,
+    owner.publicKey,
+    false,
+    TOKEN_2022_PROGRAM_ID
+  );
+  const [ammConfigAddress, _] = await getAmmConfigAddress(0, program.programId);
+  const tokenOutAccountAddress = await getAssociatedTokenAddressSync(
+    token1,
+    owner.publicKey,
+    false,
+    TOKEN_2022_PROGRAM_ID
+  );
+  const [tokenInVaultAddress] = await getPoolVaultAddress(
+    poolAddress,
+    token0,
+    program.programId
+  );
+  const [tokenOutVaultAddress] = await getPoolVaultAddress(
+    poolAddress,
+    token1,
+    program.programId
+  );
+  // const tokenOutMintAddress = await getPoolMintAddress(
+  //   poolAddress,
+  //   token1,
+  //   program.programId
+  // );
+  const [OracleAddress] = await getOrcleAccountAddress(
+    poolAddress,
+    program.programId
+  );
+
+  const remainingAccounts = [
+    {
+      pubkey: ammConfigAddress,
+      isSigner: false,
+      isWritable: false,
+    },
+    {
+      pubkey: poolAddress,
+      isSigner: false,
+      isWritable: false,
+    },
+    {
+      pubkey: tokenOutAccountAddress,
+      isSigner: false,
+      isWritable: false,
+    },
+    {
+      pubkey: tokenInVaultAddress,
+      isSigner: false,
+      isWritable: false,
+    },
+    {
+      pubkey: tokenOutVaultAddress,
+      isSigner: false,
+      isWritable: false,
+    },
+    // {
+    //   pubkey: tokenOutMintAddress,
+    //   isSigner: false,
+    //   isWritable: false,
+    // },
+    {
+      pubkey: OracleAddress,
+      isSigner: false,
+      isWritable: false,
+    },
+  ];
+  const ix = await program.methods
+    .swapRouterBaseIn(amountIn, amountOutMinimum)
+    .accounts({
+      payer: owner.publicKey,
+      inputTokenAccount: inputTokenAccount,
+      inputTokenMint: token0,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      tokenProgram2022: TOKEN_2022_PROGRAM_ID,
+    })
+    .remainingAccounts(remainingAccounts)
+    .instruction();
+
+  const tx = await sendTransaction(connection, [ix], [owner]);
   return tx;
 }
 
