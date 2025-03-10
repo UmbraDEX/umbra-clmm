@@ -79,7 +79,6 @@ pub fn swap_router_base_in<'a, 'b, 'c: 'info, 'info>(
 
         // solana_program::log::sol_log_compute_units();
         accounts = remaining_accounts.as_slice();
-
         // Split remaining accounts at the next AMM config
         let (next_swap_accounts, remaining_swap_accounts) = if !accounts.is_empty() {
             accounts.split_at(accounts.iter().position(|account| {
