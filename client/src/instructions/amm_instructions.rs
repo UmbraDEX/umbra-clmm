@@ -279,7 +279,7 @@ pub fn open_position_instr(
             system_program: system_program::id(),
             token_program: spl_token::id(),
             associated_token_program: spl_associated_token_account::id(),
-            metadata_program: mpl_token_metadata::id(),
+            metadata_program: "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s",
             token_program_2022: spl_token_2022::id(),
             vault_0_mint: token_mint_0,
             vault_1_mint: token_mint_1,

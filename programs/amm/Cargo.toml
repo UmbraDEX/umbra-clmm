@@ -11,6 +11,7 @@ name = "umbra_clmm"
 doctest = false
 
 [features]
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 no-entrypoint = []
 no-idl = []
 cpi = ["no-entrypoint"]
@@ -23,16 +24,17 @@ devnet = []
 paramset = []
 
 [dependencies]
-anchor-lang = { version = "0.29.0", features = ["init-if-needed"] }
-anchor-spl = { version = "0.29.0", features = ["metadata"] }
-solana-program = "<1.17.0"
+anchor-lang = { version = "0.30.1", features = ["init-if-needed"] }
+anchor-spl = { version = "0.30.1", features = ["metadata"] }
+solana-program = "1.18.26"
 spl-memo = "4.0.0"
 uint = { git = "https://github.com/raydium-io/parity-common", package = "uint" }
-mpl-token-metadata = { version = "^1.11.0", features = ["no-entrypoint"] }
-spl-token-metadata-interface = { version = "=0.2.0" }
+# mpl-token-metadata = { version = "3.23.2", features = ["no-entrypoint"] }
+# spl-token-metadata-interface = { version = "=0.2.0" }
 bytemuck = { version = "1.19.0", features = ["derive", "min_const_generics"] }
 arrayref = { version = "0.3.6" }
 solana-security-txt = "1.1.1"
+
 
 [dev-dependencies]
 quickcheck = "0.9"
@@ -48,3 +50,6 @@ overflow-checks = true
 opt-level = 3
 incremental = false
 codegen-units = 1
+
+[patch.crates-io]
+ahash = "=0.8.6"

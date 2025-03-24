@@ -4,7 +4,7 @@
     "lint": "eslint . --report-unused-disable-directives"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.29.0",
+    "@coral-xyz/anchor": "^0.30.1",
     "@raydium-io/raydium-sdk-v2": "0.1.106-alpha",
     "@solana-developers/node-helpers": "^1.2.2",
     "@solana/buffer-layout": "^4.0.1",

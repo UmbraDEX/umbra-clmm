@@ -18,7 +18,7 @@ use anchor_spl::token_2022::{
     spl_token_2022::{self, instruction::AuthorityType},
 };
 use anchor_spl::token_interface;
-use mpl_token_metadata::{instruction::create_metadata_accounts_v3, state::Creator};
+// use mpl_token_metadata::{instruction::create_metadata_accounts_v3, state::Creator};
 use std::cell::RefMut;
 #[cfg(feature = "enable-log")]
 use std::convert::identity;
@@ -836,40 +836,40 @@ fn initialize_metadata_account<'info>(
     uri: String,
     signers_seeds: &[&[&[u8]]],
 ) -> Result<()> {
-    let create_metadata_ix = create_metadata_accounts_v3(
-        metadata_program.key(),
-        metadata_account.key(),
-        position_nft_mint.key(),
-        authority.key(),
-        payer.key(),
-        authority.key(),
-        name,
-        symbol,
-        uri,
-        Some(vec![Creator {
-            address: authority.key(),
-            verified: true,
-            share: 100,
-        }]),
-        0,
-        true,
-        false,
-        None,
-        None,
-        None,
-    );
-    solana_program::program::invoke_signed(
-        &create_metadata_ix,
-        &[
-            metadata_account.to_account_info(),
-            position_nft_mint.to_account_info(),
-            payer.to_account_info(),
-            authority.to_account_info(),
-            system_program.to_account_info(),
-            rent.to_account_info(),
-        ],
-        signers_seeds,
-    )?;
+    // let create_metadata_ix = create_metadata_accounts_v3(
+    //     metadata_program.key(),
+    //     metadata_account.key(),
+    //     position_nft_mint.key(),
+    //     authority.key(),
+    //     payer.key(),
+    //     authority.key(),
+    //     name,
+    //     symbol,
+    //     uri,
+    //     Some(vec![Creator {
+    //         address: authority.key(),
+    //         verified: true,
+    //         share: 100,
+    //     }]),
+    //     0,
+    //     true,
+    //     false,
+    //     None,
+    //     None,
+    //     None,
+    // );
+    // solana_program::program::invoke_signed(
+    //     &create_metadata_ix,
+    //     &[
+    //         metadata_account.to_account_info(),
+    //         position_nft_mint.to_account_info(),
+    //         payer.to_account_info(),
+    //         authority.to_account_info(),
+    //         system_program.to_account_info(),
+    //         rent.to_account_info(),
+    //     ],
+    //     signers_seeds,
+    // )?;
 
     Ok(())
 }
@@ -885,51 +885,51 @@ pub fn initialize_token_metadata_extension<'info>(
     uri: String,
     signers_seeds: &[&[&[u8]]],
 ) -> Result<()> {
-    let metadata = spl_token_metadata_interface::state::TokenMetadata {
-        name,
-        symbol,
-        uri,
-        ..Default::default()
-    };
+    // let metadata = spl_token_metadata_interface::state::TokenMetadata {
+    //     name,
+    //     symbol,
+    //     uri,
+    //     ..Default::default()
+    // };
 
-    let mint_data = position_nft_mint.try_borrow_data()?;
-    let mint_state_unpacked =
-        StateWithExtensions::<spl_token_2022::state::Mint>::unpack(&mint_data)?;
-    let new_account_len = mint_state_unpacked
-        .try_get_new_account_len::<spl_token_metadata_interface::state::TokenMetadata>(&metadata)?;
-    let new_rent_exempt_lamports = Rent::get()?.minimum_balance(new_account_len);
-    let additional_lamports = new_rent_exempt_lamports.saturating_sub(position_nft_mint.lamports());
-    // CPI call will borrow the account data
-    drop(mint_data);
+    // let mint_data = position_nft_mint.try_borrow_data()?;
+    // let mint_state_unpacked =
+    //     StateWithExtensions::<spl_token_2022::state::Mint>::unpack(&mint_data)?;
+    // let new_account_len = mint_state_unpacked
+    //     .try_get_new_account_len::<spl_token_metadata_interface::state::TokenMetadata>(&metadata)?;
+    // let new_rent_exempt_lamports = Rent::get()?.minimum_balance(new_account_len);
+    // let additional_lamports = new_rent_exempt_lamports.saturating_sub(position_nft_mint.lamports());
+    // // CPI call will borrow the account data
+    // drop(mint_data);
 
-    let cpi_context = CpiContext::new(
-        token_2022_program.to_account_info(),
-        Transfer {
-            from: payer.to_account_info(),
-            to: position_nft_mint.to_account_info(),
-        },
-    );
-    transfer(cpi_context, additional_lamports)?;
+    // let cpi_context = CpiContext::new(
+    //     token_2022_program.to_account_info(),
+    //     Transfer {
+    //         from: payer.to_account_info(),
+    //         to: position_nft_mint.to_account_info(),
+    //     },
+    // );
+    // transfer(cpi_context, additional_lamports)?;
 
-    solana_program::program::invoke_signed(
-        &spl_token_metadata_interface::instruction::initialize(
-            token_2022_program.key,
-            position_nft_mint.key,
-            metadata_update_authority.key,
-            position_nft_mint.key,
-            &mint_authority.key(),
-            metadata.name,
-            metadata.symbol,
-            metadata.uri,
-        ),
-        &[
-            position_nft_mint.to_account_info(),
-            mint_authority.to_account_info(),
-            metadata_update_authority.to_account_info(),
-            token_2022_program.to_account_info(),
-        ],
-        signers_seeds,
-    )?;
+    // solana_program::program::invoke_signed(
+    //     &spl_token_metadata_interface::instruction::initialize(
+    //         token_2022_program.key,
+    //         position_nft_mint.key,
+    //         metadata_update_authority.key,
+    //         position_nft_mint.key,
+    //         &mint_authority.key(),
+    //         metadata.name,
+    //         metadata.symbol,
+    //         metadata.uri,
+    //     ),
+    //     &[
+    //         position_nft_mint.to_account_info(),
+    //         mint_authority.to_account_info(),
+    //         metadata_update_authority.to_account_info(),
+    //         token_2022_program.to_account_info(),
+    //     ],
+    //     signers_seeds,
+    // )?;
 
     Ok(())
 }

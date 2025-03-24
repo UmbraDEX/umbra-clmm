@@ -1,11 +1,12 @@
 [workspace]
 resolver = "2"
-members = ["programs/*", "client"]
+members = ["programs/*"]
 
 [profile.test]
 opt-level = 0
 
 [profile.release]
+overflow-checks = true
 lto = "fat"
 codegen-units = 1
 
