@@ -10,6 +10,6 @@ umbra_clmm = "CLMMjQ8usCDmeP2hZFc6Mhih7JFbjg6mHeRxeEtTWHNf"
 url = "https://github.com/UmbraDEX/umbra-clmm"
 
 [provider]
-cluster = "https://staging-rpc.dev2.eclipsenetwork.xyz"
+cluster = "https://mainnetbeta-rpc.eclipse.xyz"
 # cluster = "http://localhost:8899"
 wallet = "~/.config/solana/id.json"
